@@ -138,8 +138,7 @@
 	<header class="header">
 		<div class="header-inner">
 			<a href="/" class="logo">
-				<img src="/wisp/wisp-neutral.webp" alt="" class="logo-img" />
-				<span class="logo-text">wisp</span>
+				<span class="logo-text">Wisp.</span>
 			</a>
 			<nav class="header-nav">
 				{#if isReturningUser}
@@ -386,7 +385,7 @@
 		</div>
 
 		<footer class="footer">
-			<a href="/" class="footer-logo">wisp</a>
+			<a href="/" class="footer-logo">Wisp.</a>
 			<nav class="footer-nav">
 				<a href="/write">Write</a>
 				<span class="footer-sep">·</span>
@@ -445,22 +444,15 @@
 	.logo {
 		display: flex;
 		align-items: center;
-		gap: 0.75rem;
 		text-decoration: none;
 		color: var(--color-ink);
 	}
 
-	.logo-img {
-		width: 32px;
-		height: 32px;
-		object-fit: contain;
-	}
-
 	.logo-text {
-		font-family: var(--font-display);
-		font-size: 1.25rem;
-		font-weight: 600;
-		letter-spacing: -0.02em;
+		font-family: 'Nautical Prestige', serif;
+		font-size: 2.5rem;
+		font-weight: normal;
+		letter-spacing: 0;
 	}
 
 	.header-cta {
@@ -1326,9 +1318,9 @@
 	}
 
 	.footer-logo {
-		font-family: var(--font-display);
-		font-size: 1.25rem;
-		font-weight: 600;
+		font-family: 'Nautical Prestige', serif;
+		font-size: 2rem;
+		font-weight: normal;
 		color: var(--color-ink);
 		text-decoration: none;
 	}
