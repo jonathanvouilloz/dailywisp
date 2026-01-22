@@ -243,7 +243,7 @@
 
 	<!-- Section 5: Features -->
 	<section id="features" class="section features" class:visible={featuresVisible}>
-		<h2 class="features-headline">Every session leaves a mark.</h2>
+		<h2 class="features-headline">Every session <span class="highlight">leaves a mark</span>.</h2>
 
 		<div class="features-grid">
 			<div class="feature-card" style="--delay: 0s">
@@ -320,7 +320,7 @@
 
 		<div class="founder-quote">
 			<div class="founder-photo">
-				<div class="photo-placeholder">J</div>
+				<img src="/jonathan-vouilloz.webp" alt="Jonathan Vouilloz" class="founder-img" />
 			</div>
 			<blockquote>
 				"I tried everything. Apps, notebooks, morning pages. Nothing stuck. So I built something that forces me to write.<br /><br />
@@ -539,7 +539,8 @@
 		margin-bottom: 2rem;
 	}
 
-	.hero-headline .highlight {
+	.hero-headline .highlight,
+	.features-headline .highlight {
 		color: var(--color-accent);
 	}
 
@@ -1064,18 +1065,11 @@
 		margin: 0 auto 2rem;
 	}
 
-	.photo-placeholder {
+	.founder-img {
 		width: 100%;
 		height: 100%;
 		border-radius: 50%;
-		background: linear-gradient(135deg, var(--color-accent), #818cf8);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-family: var(--font-display);
-		font-size: 2rem;
-		font-weight: 600;
-		color: #fff;
+		object-fit: cover;
 	}
 
 	.founder-quote blockquote {
