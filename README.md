@@ -1,38 +1,52 @@
-# sv
+# Wisp
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A minimalist journaling app that helps you clear your mind through constraint.
 
-## Creating a project
+**300 words. No stopping. No editing. Just flow.**
 
-If you're seeing this, you've probably already done this step. Congrats!
+## What is Wisp?
 
-```sh
-# create a new project in the current directory
-npx sv create
+Wisp is a daily brain dump for founders and creators who think too much. It uses a unique "ink gauge" mechanic: if you stop typing, your ink drains. If it empties, your session fades away forever.
 
-# create a new project in my-app
-npx sv create my-app
-```
+This constraint forces you to write without overthinking — the key to unlocking flow state.
 
-## Developing
+## Features
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+- **Ink Gauge** — Keep writing or watch your words disappear
+- **100% Private** — All data stays in your browser (IndexedDB)
+- **Mood Tracking** — Record how each session felt
+- **Streak Calendar** — Watch your progress grow over time
+- **Dark Mode** — Easy on the eyes, day or night
+- **No Account Required** — Just open and write
 
-```sh
+## Tech Stack
+
+- SvelteKit 2.x
+- Dexie.js (IndexedDB)
+- Vanilla CSS
+- TypeScript
+
+## Development
+
+```bash
+# Install dependencies
+npm install
+
+# Start dev server
 npm run dev
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```sh
+# Build for production
 npm run build
 ```
 
-You can preview the production build with `npm run preview`.
+## Design Philosophy
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+Wisp follows a "Zen Cozy" aesthetic:
+- Warm neutral tones
+- Slow, fluid animations
+- Serif typography for content
+- Desktop-first experience
+
+---
+
+**Project by [@jonvolio](https://twitter.com/jonvolio) — [jonlabs.ch](https://jonlabs.ch)**
