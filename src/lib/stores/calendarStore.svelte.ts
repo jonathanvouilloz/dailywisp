@@ -1,5 +1,6 @@
 import { getAllSessions, getSessionByDate, calculateStreak } from '$lib/db';
 import type { Session } from '$lib/types';
+import { isSessionLocked } from '$lib/utils/premium';
 
 class CalendarStore {
 	sessions = $state<Session[]>([]);
@@ -36,6 +37,20 @@ class CalendarStore {
 
 	// Count of interrupted sessions for badge
 	interruptedCount = $derived(this.interruptedSessions.length);
+
+	// Set of locked session dates (beyond 90 days for free tier)
+	lockedDates = $derived.by<Set<string>>(() => {
+		const set = new Set<string>();
+		for (const session of this.sessions) {
+			if (session.status === 'completed' && isSessionLocked(session.date)) {
+				set.add(session.date);
+			}
+		}
+		return set;
+	});
+
+	// Count of locked sessions
+	lockedCount = $derived(this.lockedDates.size);
 
 	// Total stats
 	totalSessions = $derived(this.sessions.filter((s) => s.status === 'completed').length);
@@ -98,6 +113,10 @@ class CalendarStore {
 
 	hasCompletedSession(date: string): boolean {
 		return this.completedDates.has(date);
+	}
+
+	isLocked(date: string): boolean {
+		return this.lockedDates.has(date);
 	}
 
 	async onSessionCompleted(): Promise<void> {

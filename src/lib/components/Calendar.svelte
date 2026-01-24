@@ -3,6 +3,10 @@
 	import { calendarStore } from '$lib/stores';
 	import { MOODS, type MoodLevel } from '$lib/types';
 	import { t, getMonthNames, getMoodLabel } from '$lib/i18n';
+	import { isSessionLocked } from '$lib/utils/premium';
+
+	let showLockedMessage = $state(false);
+	let lockedMessageTimeout: ReturnType<typeof setTimeout> | null = null;
 
 	// Get current date info
 	const today = new Date();
@@ -58,6 +62,12 @@
 
 		const session = calendarStore.getSessionForDate(dateStr);
 
+		// Check if session is locked
+		if (session?.status === 'completed' && isSessionLocked(dateStr)) {
+			showLockedToast();
+			return;
+		}
+
 		if (isToday(dateStr)) {
 			if (session?.status === 'completed') {
 				goto(`/journal/${dateStr}`);
@@ -69,7 +79,16 @@
 		}
 	}
 
-	// Check if day is clickable
+	// Show locked session toast
+	function showLockedToast(): void {
+		if (lockedMessageTimeout) clearTimeout(lockedMessageTimeout);
+		showLockedMessage = true;
+		lockedMessageTimeout = setTimeout(() => {
+			showLockedMessage = false;
+		}, 3000);
+	}
+
+	// Check if day is clickable (locked sessions are still clickable to show message)
 	function isClickable(dateStr: string): boolean {
 		if (isFuture(dateStr)) return false;
 
@@ -78,6 +97,12 @@
 		if (isToday(dateStr)) return true;
 		return session?.status === 'completed';
 	}
+
+	// Check if a date is locked
+	function isLockedDate(dateStr: string): boolean {
+		const session = calendarStore.getSessionForDate(dateStr);
+		return session?.status === 'completed' && isSessionLocked(dateStr);
+	}
 </script>
 
 <div class="calendar" role="region" aria-label="Writing calendar for {currentYear}">
@@ -85,6 +110,17 @@
 	<header class="calendar-header">
 		<span class="year-label">{currentYear}</span>
 	</header>
+
+	<!-- Locked session toast -->
+	{#if showLockedMessage}
+		<div class="locked-toast" role="alert">
+			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+				<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+				<path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+			</svg>
+			<span>{t('premium.lockedDesc')}</span>
+		</div>
+	{/if}
 
 	<!-- Months grid -->
 	<div class="months-container">
@@ -99,6 +135,7 @@
 						{@const clickable = isClickable(date)}
 						{@const hasSession = moodColor !== null}
 						{@const missed = !future && !todayDate && !hasSession}
+						{@const locked = isLockedDate(date)}
 
 						<button
 							class="day-dot"
@@ -107,13 +144,21 @@
 							class:day-dot--completed={hasSession}
 							class:day-dot--missed={missed}
 							class:day-dot--clickable={clickable}
+							class:day-dot--locked={locked}
 							style={moodColor ? `--dot-color: ${moodColor}` : ''}
 							onclick={() => handleDayClick(date)}
 							disabled={!clickable}
-							aria-label="{day} {months[monthIndex]} {currentYear}{hasSession ? ', ' + t('calendar.completedSession') : ''}{todayDate ? ', ' + t('calendar.today') : ''}"
-							title="{day} {months[monthIndex]}{hasSession ? ' - ' + t('calendar.viewEntry') : todayDate ? ' - ' + t('calendar.writeToday') : ''}"
+							aria-label="{day} {months[monthIndex]} {currentYear}{hasSession ? ', ' + t('calendar.completedSession') : ''}{todayDate ? ', ' + t('calendar.today') : ''}{locked ? ', ' + t('premium.lockedTitle') : ''}"
+							title="{day} {months[monthIndex]}{hasSession ? (locked ? ' - ' + t('premium.lockedTitle') : ' - ' + t('calendar.viewEntry')) : todayDate ? ' - ' + t('calendar.writeToday') : ''}"
 						>
-							<span class="day-inner"></span>
+							<span class="day-inner">
+								{#if locked}
+									<svg class="lock-icon" width="6" height="6" viewBox="0 0 24 24" fill="currentColor">
+										<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+										<path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+									</svg>
+								{/if}
+							</span>
 						</button>
 					{/each}
 				</div>
@@ -244,6 +289,52 @@
 	/* Missed/incomplete past dates */
 	.day-dot--missed .day-inner {
 		opacity: 0.25;
+	}
+
+	/* Locked sessions (beyond 90 days for free tier) */
+	.day-dot--locked .day-inner {
+		opacity: 0.4;
+		filter: grayscale(0.5);
+	}
+
+	.day-dot--locked .lock-icon {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		opacity: 0.8;
+		color: var(--color-bg);
+	}
+
+	/* Locked toast message */
+	.locked-toast {
+		position: fixed;
+		top: var(--space-lg);
+		left: 50%;
+		transform: translateX(-50%);
+		display: flex;
+		align-items: center;
+		gap: var(--space-sm);
+		padding: var(--space-sm) var(--space-lg);
+		background: var(--color-bg-alt);
+		border-radius: var(--radius-full);
+		font-family: var(--font-ui);
+		font-size: 0.875rem;
+		color: var(--color-text-muted);
+		z-index: 50;
+		animation: toast-slide-in 0.3s ease;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	}
+
+	@keyframes toast-slide-in {
+		from {
+			opacity: 0;
+			transform: translateX(-50%) translateY(-10px);
+		}
+		to {
+			opacity: 1;
+			transform: translateX(-50%) translateY(0);
+		}
 	}
 
 	/* Clickable states */

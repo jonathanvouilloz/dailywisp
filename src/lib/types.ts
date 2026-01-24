@@ -39,6 +39,8 @@ export interface User {
 	timezone: string;
 	createdAt: Date;
 	onboardingCompleted: boolean;
+	totalSessions: number;        // Total completed sessions count
+	lastBackupReminder: number;   // Session count at last backup reminder
 }
 
 export type WritingMode = 'normal' | 'zen';

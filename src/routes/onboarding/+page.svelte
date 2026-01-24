@@ -11,6 +11,7 @@
 	let showEvaporateDemo = $state(false);
 
 	const canContinue = $derived(step === 1 ? name.trim().length > 0 : true);
+	const totalSteps = 4;
 
 	async function nextStep() {
 		if (isSubmitting) return;
@@ -21,7 +22,7 @@
 			isSubmitting = false;
 		}
 
-		if (step < 3) {
+		if (step < totalSteps) {
 			step++;
 			// Trigger evaporate demo on step 2
 			if (step === 2) {
@@ -50,8 +51,8 @@
 <main class="onboarding">
 	<div class="onboarding-container">
 		<!-- Progress indicator -->
-		<div class="progress" aria-label="Step {step} of 3">
-			{#each [1, 2, 3] as dot}
+		<div class="progress" aria-label="Step {step} of {totalSteps}">
+			{#each [1, 2, 3, 4] as dot}
 				<span
 					class="progress-dot"
 					class:progress-dot--active={dot === step}
@@ -143,8 +144,30 @@
 							<span class="gauge-label">{t('onboarding.gaugeFull')}</span>
 						</div>
 					</div>
+				</div>
 
-					<p class="ready-text">{t('onboarding.readyToFree')}</p>
+				<button class="continue-btn" onclick={nextStep}>
+					{t('common.continue')}
+				</button>
+			</div>
+
+		<!-- Step 4: Privacy & Backup -->
+		{:else if step === 4}
+			<div class="step step--privacy">
+				<div class="wisp-container">
+					<Wisp size="md" mood="neutral" />
+				</div>
+
+				<div class="content">
+					<div class="privacy-icon">
+						<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+							<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+							<path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+						</svg>
+					</div>
+					<h1 class="title">{t('onboarding.privacyTitle')}</h1>
+					<p class="subtitle">{@html t('onboarding.privacyDesc').replace('\n', '<br />')}</p>
+					<p class="backup-note">{@html t('onboarding.backupNote').replace('\n', '<br />')}</p>
 				</div>
 
 				<button
@@ -152,7 +175,7 @@
 					onclick={nextStep}
 					disabled={isSubmitting}
 				>
-					{isSubmitting ? t('onboarding.gettingReady') : t('write.startWriting')}
+					{isSubmitting ? t('onboarding.gettingReady') : t('onboarding.gotIt')}
 				</button>
 			</div>
 		{/if}
@@ -416,11 +439,28 @@
 		opacity: 0.7;
 	}
 
-	.ready-text {
-		font-family: var(--font-body);
-		font-size: 1rem;
+	/* Privacy step */
+	.privacy-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 80px;
+		height: 80px;
+		border-radius: 50%;
+		background: var(--color-bg-alt);
+		color: var(--color-text);
+		margin-bottom: var(--space-md);
+	}
+
+	.backup-note {
+		font-family: var(--font-ui);
+		font-size: 0.9rem;
 		color: var(--color-text-muted);
-		margin: var(--space-lg) 0 0 0;
+		margin: var(--space-md) 0 0 0;
+		padding: var(--space-md);
+		background: var(--color-bg-alt);
+		border-radius: var(--radius-md);
+		max-width: 340px;
 	}
 
 	/* Continue button */

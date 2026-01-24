@@ -14,6 +14,18 @@ db.version(1).stores({
 	settings: '++id'
 });
 
+// Migration v2: Add session counting fields for backup reminders
+db.version(2).stores({
+	sessions: '++id, date, status, createdAt',
+	users: '++id',
+	settings: '++id'
+}).upgrade(tx => {
+	return tx.table('users').toCollection().modify(user => {
+		user.totalSessions = user.totalSessions ?? 0;
+		user.lastBackupReminder = user.lastBackupReminder ?? 0;
+	});
+});
+
 export { db };
 
 // Helper functions

@@ -7,6 +7,7 @@
 	import Wisp from '$lib/components/Wisp.svelte';
 	import MoodIcon from '$lib/components/MoodIcon.svelte';
 	import { t, getMoodLabel } from '$lib/i18n';
+	import { isSessionLocked } from '$lib/utils/premium';
 
 	// Enable smooth View Transitions for navigation
 	onNavigate((navigation) => {
@@ -25,6 +26,7 @@
 	let session = $state<Session | null>(null);
 	let loading = $state(true);
 	let adjacentDates = $state<{ prev: string | null; next: string | null }>({ prev: null, next: null });
+	let isLocked = $state(false);
 
 	const dateParam = $derived($page.params.date);
 
@@ -117,12 +119,20 @@
 	// Load session when date changes
 	async function loadSession(date: string): Promise<void> {
 		loading = true;
+		isLocked = false;
 
 		const foundSession = await getSessionByDate(date);
 
 		if (foundSession && (foundSession.status === 'completed' || foundSession.status === 'interrupted')) {
-			session = foundSession;
-			adjacentDates = findAdjacentSessions(date);
+			// Check if session is locked (beyond 90 days for free tier)
+			if (foundSession.status === 'completed' && isSessionLocked(date)) {
+				isLocked = true;
+				session = foundSession; // Keep session for date display
+				adjacentDates = findAdjacentSessions(date);
+			} else {
+				session = foundSession;
+				adjacentDates = findAdjacentSessions(date);
+			}
 		} else {
 			// Session not found or not completed/interrupted, redirect
 			goto('/home');
@@ -171,6 +181,46 @@
 			<Wisp size="md" mood="thinking" />
 			<span class="loading-text">{t('journal.loading')}</span>
 		</div>
+	{:else if isLocked && session}
+		<!-- Locked session view -->
+		<div class="locked-view">
+			<header class="journal-header">
+				<a href="/home" class="back-btn" aria-label={t('common.backToCalendar')}>
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M19 12H5M12 19l-7-7 7-7"/>
+					</svg>
+				</a>
+
+				<div class="header-center">
+					<h1 class="journal-date">{formatDate(session.date)}</h1>
+				</div>
+
+				<div class="header-spacer"></div>
+			</header>
+
+			<div class="locked-content">
+				<div class="locked-icon">
+					<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+						<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+						<path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+					</svg>
+				</div>
+
+				<Wisp size="md" mood="thinking" opacity={0.5} />
+
+				<h2 class="locked-title">{t('premium.lockedTitle')}</h2>
+				<p class="locked-desc">{t('premium.lockedDesc')}</p>
+				<p class="locked-unlock">{t('premium.unlockWith')}</p>
+
+				<a href="/settings" class="btn btn--primary">
+					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+					</svg>
+					{t('premium.upgradeBtn')}
+				</a>
+			</div>
+		</div>
+
 	{:else if session}
 		<!-- Header -->
 		<header class="journal-header">
@@ -621,6 +671,70 @@
 
 	.not-found .btn {
 		margin-top: var(--space-md);
+	}
+
+	/* Locked view */
+	.locked-view {
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.locked-view .journal-header {
+		border-bottom: none;
+		margin-bottom: 0;
+	}
+
+	.locked-view .header-spacer {
+		width: 40px;
+	}
+
+	.locked-content {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: var(--space-lg);
+		padding: var(--space-xl);
+		text-align: center;
+	}
+
+	.locked-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100px;
+		height: 100px;
+		border-radius: 50%;
+		background: var(--color-bg-alt);
+		color: var(--color-text-muted);
+	}
+
+	.locked-title {
+		font-family: var(--font-body);
+		font-size: 1.5rem;
+		font-weight: 500;
+		margin: 0;
+		color: var(--color-text);
+	}
+
+	.locked-desc {
+		font-family: var(--font-ui);
+		font-size: 1rem;
+		color: var(--color-text-muted);
+		margin: 0;
+	}
+
+	.locked-unlock {
+		font-family: var(--font-ui);
+		font-size: 0.9rem;
+		color: var(--color-text-muted);
+		margin: 0;
+		padding: var(--space-md);
+		background: var(--color-bg-alt);
+		border-radius: var(--radius-md);
+		max-width: 300px;
 	}
 
 	/* Responsive */

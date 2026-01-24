@@ -2,10 +2,11 @@
 	import { onMount, onDestroy, tick } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { fade } from 'svelte/transition';
-	import { sessionStore } from '$lib/stores';
+	import { sessionStore, userStore } from '$lib/stores';
 	import Wisp from '$lib/components/Wisp.svelte';
 	import InkGauge from '$lib/components/InkGauge.svelte';
 	import MoodIcon from '$lib/components/MoodIcon.svelte';
+	import BackupReminderModal from '$lib/components/BackupReminderModal.svelte';
 	import { WORD_TARGET, MOODS, type MoodLevel, type WispMood } from '$lib/types';
 	import { t, getMoodLabel } from '$lib/i18n';
 
@@ -15,6 +16,9 @@
 	let editorEl = $state<HTMLDivElement | null>(null);
 	let selectedMood = $state<MoodLevel | null>(null);
 	let moodNote = $state('');
+
+	// Backup reminder state
+	let showBackupReminder = $state(false);
 
 	// Anti-paste state
 	let showPasteHint = $state(false);
@@ -140,6 +144,11 @@
 
 	async function handleComplete(): Promise<void> {
 		await sessionStore.completeSession();
+		// Increment session count and check if backup reminder should show
+		const shouldRemind = await userStore.incrementSessionCount();
+		if (shouldRemind) {
+			showBackupReminder = true;
+		}
 	}
 
 	async function submitMood(): Promise<void> {
@@ -147,6 +156,11 @@
 			await sessionStore.setMood(selectedMood, moodNote || undefined);
 			goto('/share');
 		}
+	}
+
+	async function handleDismissBackupReminder(): Promise<void> {
+		await userStore.markBackupReminderShown();
+		showBackupReminder = false;
 	}
 
 	function goHome(): void {
@@ -173,6 +187,14 @@
 <svelte:head>
 	<title>{t('write.title')}</title>
 </svelte:head>
+
+<!-- Backup Reminder Modal -->
+{#if showBackupReminder}
+	<BackupReminderModal
+		sessionCount={userStore.totalSessions}
+		onDismiss={handleDismissBackupReminder}
+	/>
+{/if}
 
 <main class="write-page">
 	{#if pageState === 'loading'}

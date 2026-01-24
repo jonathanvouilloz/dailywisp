@@ -472,6 +472,57 @@
 			</div>
 		</section>
 
+		<!-- Wisp+ Section -->
+		<section class="settings-section settings-section--premium">
+			<h2>{t('settings.wispPlus')}</h2>
+
+			<div class="premium-card">
+				<div class="premium-badge">
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+					</svg>
+					{t('settings.comingSoon')}
+				</div>
+
+				<p class="premium-intro">{t('settings.unlockFull')}</p>
+
+				<ul class="premium-features">
+					<li>
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<polyline points="20 6 9 17 4 12"/>
+						</svg>
+						{t('settings.featureHistory')}
+					</li>
+					<li>
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<polyline points="20 6 9 17 4 12"/>
+						</svg>
+						{t('settings.featureFonts')}
+					</li>
+					<li>
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<polyline points="20 6 9 17 4 12"/>
+						</svg>
+						{t('settings.featurePdf')}
+					</li>
+					<li>
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<polyline points="20 6 9 17 4 12"/>
+						</svg>
+						{t('settings.featureBackup')}
+					</li>
+					<li>
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<polyline points="20 6 9 17 4 12"/>
+						</svg>
+						{t('settings.featureStats')}
+					</li>
+				</ul>
+
+				<p class="premium-price">{t('settings.priceTag')}</p>
+			</div>
+		</section>
+
 		<!-- Danger Zone -->
 		<section class="settings-section settings-section--danger">
 			<h2>{t('settings.danger')}</h2>
@@ -634,6 +685,77 @@
 	.settings-section--danger h2 {
 		color: var(--color-danger);
 		border-color: color-mix(in srgb, var(--color-danger) 20%, transparent);
+	}
+
+	/* Premium section */
+	.settings-section--premium h2 {
+		color: var(--color-accent);
+		border-color: color-mix(in srgb, var(--color-accent) 20%, transparent);
+	}
+
+	.premium-card {
+		background: var(--color-bg-alt);
+		border-radius: var(--radius-lg);
+		padding: var(--space-lg);
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-md);
+	}
+
+	.premium-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-xs);
+		align-self: flex-start;
+		padding: var(--space-xs) var(--space-md);
+		background: var(--color-accent);
+		color: white;
+		border-radius: var(--radius-full);
+		font-family: var(--font-ui);
+		font-size: 0.75rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.premium-intro {
+		font-family: var(--font-ui);
+		font-size: 0.9rem;
+		color: var(--color-text-muted);
+		margin: 0;
+	}
+
+	.premium-features {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-sm);
+	}
+
+	.premium-features li {
+		display: flex;
+		align-items: center;
+		gap: var(--space-sm);
+		font-family: var(--font-ui);
+		font-size: 0.9rem;
+		color: var(--color-text);
+	}
+
+	.premium-features svg {
+		color: var(--color-success);
+		flex-shrink: 0;
+	}
+
+	.premium-price {
+		font-family: var(--font-ui);
+		font-size: 0.875rem;
+		font-weight: 500;
+		color: var(--color-text);
+		margin: var(--space-sm) 0 0 0;
+		padding-top: var(--space-md);
+		border-top: 1px solid color-mix(in srgb, var(--color-text-muted) 20%, transparent);
 	}
 
 	/* Setting rows */

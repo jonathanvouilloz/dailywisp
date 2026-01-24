@@ -143,6 +143,10 @@ const translations = {
 		'onboarding.gaugeFull': 'Full',
 		'onboarding.readyToFree': 'Ready to free your mind?',
 		'onboarding.gettingReady': 'Getting ready...',
+		'onboarding.privacyTitle': 'Your thoughts stay private',
+		'onboarding.privacyDesc': 'Everything is stored locally on your device.\nNo account, no server, no one can read your words.',
+		'onboarding.backupNote': 'This means: backup = your job.\nWe\'ll remind you to export your data regularly.',
+		'onboarding.gotIt': 'Got it',
 
 		// Journal
 		'journal.title': '{date} | Wisp Journal',
@@ -188,7 +192,31 @@ const translations = {
 
 		// Components
 		'component.wisp': 'Wisp, your writing companion',
-		'component.moodIcon': 'Mood: {mood}'
+		'component.moodIcon': 'Mood: {mood}',
+
+		// Backup reminder
+		'backup.title': 'Time for a backup!',
+		'backup.message': "You've completed {count} sessions!",
+		'backup.description': 'Your words are precious. Export a backup to keep them safe.',
+		'backup.exportNow': 'Export now',
+		'backup.remindLater': 'Remind me later',
+
+		// Premium / History limit
+		'premium.lockedTitle': 'Session locked',
+		'premium.lockedDesc': 'This session is older than 90 days.',
+		'premium.unlockWith': 'Unlock unlimited history with Wisp+',
+		'premium.upgradeBtn': 'Learn about Wisp+',
+
+		// Settings - Wisp+
+		'settings.wispPlus': 'Wisp+',
+		'settings.comingSoon': 'Coming soon',
+		'settings.unlockFull': 'Unlock the full experience:',
+		'settings.featureHistory': 'Unlimited history',
+		'settings.featureFonts': '5 beautiful fonts',
+		'settings.featurePdf': 'Styled PDF export',
+		'settings.featureBackup': 'Encrypted cloud backup',
+		'settings.featureStats': 'Advanced writing stats',
+		'settings.priceTag': '$29 one-time, forever yours'
 	},
 
 	fr: {
@@ -328,6 +356,10 @@ const translations = {
 		'onboarding.gaugeFull': 'Plein',
 		'onboarding.readyToFree': 'Prêt à libérer ton esprit ?',
 		'onboarding.gettingReady': 'Préparation...',
+		'onboarding.privacyTitle': 'Tes pensées restent privées',
+		'onboarding.privacyDesc': 'Tout est stocké localement sur ton appareil.\nPas de compte, pas de serveur, personne ne peut lire tes mots.',
+		'onboarding.backupNote': "Du coup : la sauvegarde, c'est toi.\nOn te rappellera d'exporter tes données régulièrement.",
+		'onboarding.gotIt': 'Compris',
 
 		// Journal
 		'journal.title': '{date} | Journal Wisp',
@@ -373,7 +405,31 @@ const translations = {
 
 		// Components
 		'component.wisp': "Wisp, ton compagnon d'écriture",
-		'component.moodIcon': 'Humeur : {mood}'
+		'component.moodIcon': 'Humeur : {mood}',
+
+		// Backup reminder
+		'backup.title': "C'est l'heure du backup !",
+		'backup.message': 'Tu as complété {count} sessions !',
+		'backup.description': 'Tes mots sont précieux. Exporte une sauvegarde pour les garder en sécurité.',
+		'backup.exportNow': 'Exporter maintenant',
+		'backup.remindLater': 'Me rappeler plus tard',
+
+		// Premium / History limit
+		'premium.lockedTitle': 'Session verrouillée',
+		'premium.lockedDesc': 'Cette session a plus de 90 jours.',
+		'premium.unlockWith': "Débloque l'historique illimité avec Wisp+",
+		'premium.upgradeBtn': 'Découvrir Wisp+',
+
+		// Settings - Wisp+
+		'settings.wispPlus': 'Wisp+',
+		'settings.comingSoon': 'Bientôt disponible',
+		'settings.unlockFull': "Débloque l'expérience complète :",
+		'settings.featureHistory': 'Historique illimité',
+		'settings.featureFonts': '5 belles polices',
+		'settings.featurePdf': 'Export PDF stylisé',
+		'settings.featureBackup': 'Sauvegarde cloud chiffrée',
+		'settings.featureStats': "Statistiques d'écriture avancées",
+		'settings.priceTag': '29€ une fois, à vie'
 	}
 } as const;
 
