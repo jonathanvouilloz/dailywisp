@@ -49,6 +49,13 @@
 	}
 
 	onMount(async () => {
+		// Redirect to onboarding if not completed
+		await userStore.init();
+		if (!userStore.isOnboarded) {
+			goto('/onboarding');
+			return;
+		}
+
 		// If session already started with text (coming from journal/drafts resume)
 		if (sessionStore.isActive && sessionStore.text) {
 			pageState = 'active';
