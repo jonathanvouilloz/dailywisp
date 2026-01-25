@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { userStore } from '$lib/stores';
+	import { analytics } from '$lib/analytics';
 
 	// User state
 	let isReturningUser = $state(false);
@@ -144,7 +145,7 @@
 				{#if isReturningUser}
 					<a href="/home" class="header-cta header-cta--primary">My journal</a>
 				{/if}
-				<a href="/write" class="header-cta">Try it now</a>
+				<a href="/write" class="header-cta" onclick={() => analytics.ctaClick('header')}>Try it now</a>
 			</nav>
 		</div>
 	</header>
@@ -166,7 +167,7 @@
 				A daily brain dump for founders and creators who think too much.
 			</p>
 
-			<a href="/write" class="cta-primary">
+			<a href="/write" class="cta-primary" onclick={() => analytics.ctaClick('hero')}>
 				Start writing — it's free
 				<svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 					<path d="M5 12h14M12 5l7 7-7 7"/>
@@ -344,7 +345,7 @@
 	<section id="close" class="section close" class:visible={closeVisible}>
 		<h2 class="close-headline">Your thoughts are waiting.</h2>
 
-		<a href="/write" class="cta-massive">
+		<a href="/write" class="cta-massive" onclick={() => analytics.ctaClick('close')}>
 			Start writing — it's free
 			<svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 				<path d="M5 12h14M12 5l7 7-7 7"/>

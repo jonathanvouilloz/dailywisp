@@ -9,6 +9,7 @@
 	import BackupReminderModal from '$lib/components/BackupReminderModal.svelte';
 	import { WORD_TARGET, MOODS, type MoodLevel, type WispMood } from '$lib/types';
 	import { t, getMoodLabel } from '$lib/i18n';
+	import { analytics } from '$lib/analytics';
 
 	type PageState = 'loading' | 'already_done' | 'ready' | 'active' | 'completed' | 'interrupted';
 
@@ -32,6 +33,11 @@
 
 	// Derive Wisp opacity from gauge level (min 0.2 for visibility)
 	const wispOpacity = $derived(Math.max(0.2, sessionStore.gaugeLevel / 100));
+
+	// Derive text opacity from gauge level (min 0.25 for readability)
+	const textOpacity = $derived(
+		sessionStore.canComplete ? 1 : Math.max(0.25, 0.25 + (sessionStore.gaugeLevel / 100) * 0.75)
+	);
 
 	// Derive Wisp mood based on gauge and completion status
 	const wispMood = $derived.by((): WispMood => {
@@ -100,6 +106,7 @@
 	function startWriting(): void {
 		sessionStore.startSession();
 		pageState = 'active';
+		analytics.sessionStart();
 		// Focus editor after state change
 		setTimeout(() => editorEl?.focus(), 50);
 	}
@@ -150,6 +157,12 @@
 	}
 
 	async function handleComplete(): Promise<void> {
+		// Track session completion with stats
+		const durationSec = sessionStore.startTime
+			? Math.floor((Date.now() - sessionStore.startTime.getTime()) / 1000)
+			: 0;
+		analytics.sessionComplete(sessionStore.wordCount, durationSec);
+
 		await sessionStore.completeSession();
 		// Increment session count and check if backup reminder should show
 		const shouldRemind = await userStore.incrementSessionCount();
@@ -160,6 +173,7 @@
 
 	async function submitMood(): Promise<void> {
 		if (selectedMood) {
+			analytics.moodSelect(selectedMood);
 			await sessionStore.setMood(selectedMood, moodNote || undefined);
 			goto('/share');
 		}
@@ -186,6 +200,7 @@
 			pageState = 'completed';
 		}
 		if (sessionStore.isInterrupted && pageState === 'active') {
+			analytics.sessionFailed(sessionStore.wordCount);
 			pageState = 'interrupted';
 		}
 	});
@@ -244,8 +259,8 @@
 				<div
 					bind:this={editorEl}
 					class="writing-area"
-					class:writing-area--fading={sessionStore.gaugeLevel < 15 && !sessionStore.canComplete}
 					class:writing-area--flow={sessionStore.inFlowState}
+					style="opacity: {textOpacity}"
 					contenteditable="true"
 					spellcheck="false"
 					role="textbox"
@@ -430,6 +445,7 @@
 		white-space: pre-wrap;
 		word-wrap: break-word;
 		caret-color: var(--color-text);
+		transition: opacity 0.15s ease-out;
 	}
 
 	.writing-area:empty:before {
@@ -437,11 +453,6 @@
 		color: var(--color-text-muted);
 		opacity: 0.6;
 		pointer-events: none;
-	}
-
-	.writing-area--fading {
-		opacity: 0.6;
-		transition: opacity var(--transition-smoke);
 	}
 
 	/* Flow state - subtle glow around writing area */

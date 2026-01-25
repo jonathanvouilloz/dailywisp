@@ -25,6 +25,7 @@
 	},
 	"dependencies": {
 		"dexie": "^4.2.1",
-		"jspdf": "^4.0.0"
+		"jspdf": "^4.0.0",
+		"posthog-js": "^1.335.2"
 	}
 }

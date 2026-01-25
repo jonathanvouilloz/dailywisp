@@ -3,6 +3,7 @@
 	import { calendarStore } from '$lib/stores';
 	import Wisp from '$lib/components/Wisp.svelte';
 	import { t } from '$lib/i18n';
+	import { analytics } from '$lib/analytics';
 
 	type Template = {
 		id: string;
@@ -48,6 +49,7 @@
 
 	// Share to Twitter/X
 	function shareToTwitter(): void {
+		analytics.shareClick('twitter');
 		const text = encodeURIComponent(shareMessage);
 		const url = `https://twitter.com/intent/tweet?text=${text}`;
 		window.open(url, '_blank', 'noopener,noreferrer');
@@ -55,6 +57,7 @@
 
 	// Skip and go home
 	function skipShare(): void {
+		analytics.shareSkip();
 		goto('/home');
 	}
 </script>

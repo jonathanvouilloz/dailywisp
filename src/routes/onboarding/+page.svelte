@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
 	import { userStore } from '$lib/stores';
 	import Wisp from '$lib/components/Wisp.svelte';
 	import { t } from '$lib/i18n';
 	import { WORD_TARGET } from '$lib/types';
+	import { analytics } from '$lib/analytics';
 
 	let step = $state(1);
 	let name = $state('');
@@ -12,6 +14,10 @@
 
 	const canContinue = $derived(step === 1 ? name.trim().length > 0 : true);
 	const totalSteps = 4;
+
+	onMount(() => {
+		analytics.onboardingStart();
+	});
 
 	async function nextStep() {
 		if (isSubmitting) return;
@@ -32,6 +38,7 @@
 			}
 		} else {
 			isSubmitting = true;
+			analytics.onboardingComplete();
 			await userStore.completeOnboarding();
 			goto('/write');
 		}
