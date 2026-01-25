@@ -61,9 +61,9 @@ export const WORD_TARGET = 300;
 // Moteur de jauge
 export const GAUGE_START = 50;
 export const GAUGE_PER_CHAR = 0.8;        // +0.8% par caractère
-export const GAUGE_GRACE_DELAY = 1.75;    // secondes avant decay
-export const GAUGE_DECAY = 7;             // %/seconde (normal)
-export const GAUGE_DECAY_FLOW = 3.5;      // %/seconde (en Flow)
+export const GAUGE_GRACE_DELAY = 1.5;     // secondes avant decay
+export const GAUGE_DECAY = 12;            // %/seconde (normal)
+export const GAUGE_DECAY_FLOW = 6;        // %/seconde (en Flow)
 export const GAUGE_MAX = 100;
 export const GAUGE_MIN = 0;
 
