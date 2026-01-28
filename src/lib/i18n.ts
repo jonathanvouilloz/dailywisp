@@ -124,6 +124,9 @@ const translations = {
 		'calendar.today': 'today',
 		'calendar.viewEntry': 'View entry',
 		'calendar.writeToday': 'Write today',
+		'calendar.listView': 'List view',
+		'calendar.gridView': 'Grid view',
+		'calendar.weekdays': 'Mo,Tu,We,Th,Fr,Sa,Su',
 
 		// Onboarding
 		'onboarding.title': 'Welcome to Wisp',
@@ -337,6 +340,9 @@ const translations = {
 		'calendar.today': "aujourd'hui",
 		'calendar.viewEntry': "Voir l'entrée",
 		'calendar.writeToday': "Écrire aujourd'hui",
+		'calendar.listView': 'Vue liste',
+		'calendar.gridView': 'Vue grille',
+		'calendar.weekdays': 'Lu,Ma,Me,Je,Ve,Sa,Di',
 
 		// Onboarding
 		'onboarding.title': 'Bienvenue sur Wisp',
