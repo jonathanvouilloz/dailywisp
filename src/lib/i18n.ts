@@ -219,7 +219,12 @@ const translations = {
 		'settings.featurePdf': 'Styled PDF export',
 		'settings.featureBackup': 'Encrypted cloud backup',
 		'settings.featureStats': 'Advanced writing stats',
-		'settings.priceTag': '$29 one-time, forever yours'
+		'settings.priceTag': '$29 one-time, forever yours',
+
+		// Error pages
+		'error.title': 'Lost in the ink...',
+		'error.notFound': "This page doesn't exist.",
+		'error.generic': 'Something went wrong.'
 	},
 
 	fr: {
@@ -435,7 +440,12 @@ const translations = {
 		'settings.featurePdf': 'Export PDF stylisé',
 		'settings.featureBackup': 'Sauvegarde cloud chiffrée',
 		'settings.featureStats': "Statistiques d'écriture avancées",
-		'settings.priceTag': '29€ une fois, à vie'
+		'settings.priceTag': '29€ une fois, à vie',
+
+		// Error pages
+		'error.title': "Perdu dans l'encre...",
+		'error.notFound': "Cette page n'existe pas.",
+		'error.generic': "Quelque chose s'est mal passé."
 	}
 } as const;
 
